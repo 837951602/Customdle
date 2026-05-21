@@ -34,6 +34,7 @@
 	<div id="chosen"></div>
 </div></center>
 <script type="text/javascript">
+var times = 0;
 !async function(){
 var {fields, list} = JSON.parse(q=await (await fetch(q=(location.hash || '#letter').slice(1) + '.json')).text());
 var rng = +new Date() / 86400000 | 0;
@@ -51,7 +52,6 @@ rng = (rng+1e9)%list.length | 0;
 var ans = list[rng];
 
 search.value = ''; search.focus();
-var times = 0;
 function encode(str) { return str.toString().replace(/./g,c=>'&#'+c.charCodeAt()+';') }
 function Item(item, checker) {
 	return fields.map((o,i)=>
