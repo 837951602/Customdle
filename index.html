@@ -48,7 +48,7 @@ rng=rng*62914.87338195866^-1047434767;
 rng=rng*22987.956469577097^363428635;
 rng=rng*52445.03517909392^191631780;
 rng=rng*26201.03619103982^-755160193;
-rng = (rng+1e9)%list.length | 0;
+rng = (rng+9e9)%list.length | 0;
 var ans = list[rng];
 
 search.value = ''; search.focus();
