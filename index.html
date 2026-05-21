@@ -35,7 +35,7 @@
 </div></center>
 <script type="text/javascript">
 !async function(){
-var [fields, list] = JSON.parse(q=await (await fetch(q=(location.hash || '#letter').slice(1) + '.json')).text());
+var {fields, list} = JSON.parse(q=await (await fetch(q=(location.hash || '#letter').slice(1) + '.json')).text());
 var ans = list[4];
 
 search.value = ''; search.focus();
