@@ -35,9 +35,9 @@
 </div></center>
 <script type="text/javascript">
 var times = 0;
-!async function(){
+!async function(){console.log(1);
 var {fields, list} = JSON.parse(q=await (await fetch(q=(location.hash || '#letter').slice(1) + '.json')).text());
-var rng = +new Date() / 86400000 | 0;
+var rng = +new Date() / 86400000 | 0;console.log(2);
 rng=rng*11340.975903999264^1453784519;
 rng=rng*7455.4953600502195^715925186;
 rng=rng*47984.215233261115^1829826041;
@@ -111,3 +111,5 @@ function AnswerChecker(ref, expect, actual) { // console.log(ref, expect, actual
 	}
 }
 }();
+
+</script></body></html>
