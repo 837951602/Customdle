@@ -104,8 +104,8 @@ function AnswerChecker(ref, expect, actual) { // console.log(ref, expect, actual
 		return 'incorrect ' + dir;
 	case "2D":
 		if (expect[1] == actual[1] && expect[2] == actual[2]) return 'correct';
-		var det = Math.atan2(expect[2] - actual[2] && expect[1] - actual[1]) / Math.PI * 4;
-		var dir = ['goL','goLD','goD','goRD','goR','goRU','goU','goLU','goL'][det + 4.5 | 0];
+		var det = Math.atan2(expect[2] - actual[2], expect[1] - actual[1]) / Math.PI * 4;
+		var dir = ['goL','goLD','goD','goRD','goR','goRU','goU','goLU','goL'][Math.floor(det + 4.5)];
 		if (Math.hypot(expect[1]-actual[1],expect[2]-actual[2])<ref.tol) return 'partial ' + dir;
 		return 'incorrect ' + dir;
 	}
