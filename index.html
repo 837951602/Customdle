@@ -39,7 +39,7 @@ var times = 0;
 				  // var q, ans;
 var {fields, list} = JSON.parse(q=await (await fetch(q=(location.hash || '#letter').slice(1) + '.json')).text());
 var rng = +new Date() / 86400000 | 0;console.log(2);
-for (var i=0; i<q.length; ++i) rng ^= rng * (2*i) ^ q[i]; // so different puzzle has different rng
+for (var i=0; i<q.length; ++i) rng ^= rng * (2*i) ^ q.charCodeAt(i); // so different puzzle has different rng
 rng = (rng+9e9)%list.length | 0;
 ans = list[rng];
 
