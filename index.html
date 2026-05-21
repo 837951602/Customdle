@@ -52,16 +52,6 @@ var ans = list[rng];
 
 search.value = ''; search.focus();
 var times = 0;
-function encode(str) { return str.toString().replace(/./g,c=>'&#'+c.charCodeAt()+';') }
-function Item(item, checker) {
-	return fields.map((o,i)=>
-		'<div class="item '+checker(o,ans[i],item[i])+'"><div class="itemH">'
-		+encode(o.name)+'</div><div class="itemL">'
-		+encode(item[i][0])+'</div></div>').join('');
-}
-function defaultList() {
-	return 'You have tried for '+times+' times.';
-}
 search.addEventListener('input', function() {
 	var mtc = search.value;
 	if (!mtc) return searched.innerHTML = defaultList();
@@ -77,6 +67,11 @@ search.addEventListener('input', function() {
 		.map(t=>'<div class="toclick" onclick="select('+t+')">' +
 			Item(list[t], _=>'inSelList') + '</div>').join('');
 });
+	searched.innerHTML = defaultList();
+}();
+function defaultList() {
+	return 'You have tried for '+times+' times.';
+}
 function select(idx) {
 	var obj = list.splice(idx,1)[0];
 	if (obj[0][2] != null && obj[0][2] === ans[0][2]) obj = ans; // Equivalent joint
@@ -90,7 +85,14 @@ function select(idx) {
 		search.value = '';
 		searched.innerHTML = defaultList();
 	}
-}searched.innerHTML = defaultList();
+}
+function encode(str) { return str.toString().replace(/./g,c=>'&#'+c.charCodeAt()+';') }
+function Item(item, checker) {
+	return fields.map((o,i)=>
+		'<div class="item '+checker(o,ans[i],item[i])+'"><div class="itemH">'
+		+encode(o.name)+'</div><div class="itemL">'
+		+encode(item[i][0])+'</div></div>').join('');
+}
 function AnswerChecker(ref, expect, actual) { // console.log(ref, expect, actual, dir)
 	switch (ref.type) {
 	case "text":
@@ -110,7 +112,6 @@ function AnswerChecker(ref, expect, actual) { // console.log(ref, expect, actual
 		return 'incorrect ' + dir;
 	}
 }
-}();
 </script>
 </body>
 </html>
