@@ -2,7 +2,7 @@
 "fields": [
 	{"name": "name", "type": "text"},
 	{"name": "type", "type": "text"},
-	{"name": "order", "type": "number", tol: 1}
+	{"name": "order", "type": "number", "tol": 1}
 ],
 "list": [
 	[["A", ["A", "a", '*']], ["vowel", ["a"]], ["1", 1]],
