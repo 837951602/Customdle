@@ -36,20 +36,12 @@
 <script type="text/javascript">
 var times = 0;
 !async function(){console.log(1);
+				  // var q, ans;
 var {fields, list} = JSON.parse(q=await (await fetch(q=(location.hash || '#letter').slice(1) + '.json')).text());
 var rng = +new Date() / 86400000 | 0;console.log(2);
-rng=rng*11340.975903999264^1453784519;
-rng=rng*7455.4953600502195^715925186;
-rng=rng*47984.215233261115^1829826041;
-rng=rng*40663.61940660297^135678455;
-rng=rng*35797.21963747042^1768403925;
-rng=rng*62362.25052365406^-861773140;
-rng=rng*62914.87338195866^-1047434767;
-rng=rng*22987.956469577097^363428635;
-rng=rng*52445.03517909392^191631780;
-rng=rng*26201.03619103982^-755160193;
+for (var i=0; i<q.length; ++i) rng ^= rng * (2*i) ^ q[i]; // so different puzzle has different rng
 rng = (rng+9e9)%list.length | 0;
-var ans = list[rng];
+ans = list[rng];
 
 search.value = ''; search.focus();
 function encode(str) { return str.toString().replace(/./g,c=>'&#'+c.charCodeAt()+';') }
