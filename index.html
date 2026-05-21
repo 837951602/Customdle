@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custumdle</title>
+    <style>
+    .toclick { cursor: pointer; border: 1px solid black; padding: -3px; margin: 3px; }
+    .item { display: inline-block; padding: 6px; margin: 6px; border-radius: 6px; }
+	#searched > div { border: 1px black solid; margin: 6px 0px}
+    #chosen > div { border: 1px black solid; margin: 6px 0px}
+    .inSelList { border: 1px black solid; }
+    .itemH { }
+    
+    .correct { background-color: mediumseagreen; }
+    .partial { background-color: rgb(202, 180, 88); }
+    .incorrect { background-color: gainsboro; }
+    
+    .goD > .itemL::after { content: "⬇️"; }
+    .goU > .itemL::after { content: "⬆️"; }
+    .goR > .itemL::after { content: "➡️"; }
+    .goL > .itemL::after { content: "⬅️"; }
+    .goRD > .itemL::after { content: "↘️"; }
+    .goRU > .itemL::after { content: "↗️"; }
+    .goLD > .itemL::after { content: "↙️"; }
+    .goLU > .itemL::after { content: "↖️"; }
+    </style>
+</head>
+<body><center>
+<div style="max-width: 600px; width: 100%; align: center">
+	<span id="guessing">
+	<input id="search" style="max-width: 400px; width: 100%" />
+	<div id="searched"></div></span>
+	<div id="chosen"></div>
+</div></center>
+<script type="text/javascript">
+!async function(){
+var [fields, list] = JSON.parse(q=await (await fetch(q=(location.hash || '#letter').slice(1) + '.json')).text());
+var ans = list[4];
+
+search.value = ''; search.focus();
+var times = 0;
+function encode(str) { return str.toString().replace(/./g,c=>'&#'+c.charCodeAt()+';') }
+function Item(item, checker) {
+	return fields.map((o,i)=>
+		'<div class="item '+checker(o,ans[i],item[i])+'"><div class="itemH">'
+		+encode(o.name)+'</div><div class="itemL">'
+		+encode(item[i][0])+'</div></div>').join('');
+}
+function defaultList() {
+	return 'You have tried for '+times+' times.';
+}
+search.addEventListener('input', function() {
+	var mtc = search.value;
+	if (!mtc) return searched.innerHTML = defaultList();
+	var ret = [];
+	for (var i=0; i<list.length; ++i) {
+		var x = list[i];
+		if (x[0][1].some(y=>~y.indexOf(mtc))) {
+			ret.push(i);
+			if (ret.length >= 10) continue;
+		}
+	}
+	searched.innerHTML = ret
+		.map(t=>'<div class="toclick" onclick="select('+t+')">' +
+			Item(list[t], _=>'inSelList') + '</div>').join('');
+});
+function select(idx) {
+	var obj = list.splice(idx,1)[0];
+	if (obj[0][2] != null && obj[0][2] === ans[0][2]) obj = ans; // Equivalent joint
+	var elem = document.createElement('div');
+	elem.innerHTML = Item(obj, AnswerChecker);
+	chosen.insertBefore(elem, chosen.firstChild);
+	++times;
+	if (obj === ans) {
+		guessing.innerHTML = '<div style="color:green">You guessed correctly in '+times+' tries</div>'
+	} else {
+		search.value = '';
+		searched.innerHTML = defaultList();
+	}
+}searched.innerHTML = defaultList();
+function AnswerChecker(ref, expect, actual) { // console.log(ref, expect, actual, dir)
+	switch (ref.type) {
+	case "text":
+		if (JSON.stringify(expect[1]) == JSON.stringify(actual[1])) return 'correct';
+		if (expect[1].some(t=>actual[1].includes(t))) return 'partial';
+		return 'incorrect';
+	case "number":
+		if (expect[1] == actual[1]) return 'correct';
+		var dir = expect[1] > actual[1] ? 'goU' : expect[1] < actual[1] ? 'goD' : '';
+		if (Math.abs(expect[1]-actual[1])<ref.tol) return 'partial ' + dir;
+		return 'incorrect ' + dir;
+	case "2D":
+		if (expect[1] == actual[1] && expect[2] == actual[2]) return 'correct';
+		var det = Math.atan2(expect[2] - actual[2] && expect[1] - actual[1]) / Math.PI * 4;
+		var dir = ['goL','goLD','goD','goRD','goR','goRU','goU','goLU','goL'][det + 4.5 | 0];
+		if (Math.hypot(expect[1]-actual[1],expect[2]-actual[2])<ref.tol) return 'partial ' + dir;
+		return 'incorrect ' + dir;
+	}
+}
+}();
+</script>
+</body>
+</html>
