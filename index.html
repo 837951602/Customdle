@@ -28,6 +28,7 @@
 </head>
 <body><center>
 <div style="max-width: 600px; width: 100%; align: center">
+	<div id="divdesc"></div>
 	<span id="guessing">
 	<input id="search" style="max-width: 400px; width: 100%" />
 	<div id="searched"></div></span>
@@ -37,7 +38,9 @@
 var times = 0;
 !async function(){console.log(1);
 				  // var q, ans;
-var {fields, list} = JSON.parse(q=await (await fetch(q=(location.hash || '#letter').slice(1) + '.json')).text());
+var {fields, list, maxTries, desc} = JSON.parse(q=await (await fetch(q=(location.hash || '#letter').slice(1) + '.json')).text());
+divdesc.innerText = new Date().toJSON().slice(0,10) + '\n' + [desc];
+maxTries = Math.max(0, maxTries|0) || Infinity;
 var rng = +new Date() / 86400000 | 0;console.log(2);
 for (var i=0; i<q.length; ++i) rng ^= rng * (2*i) ^ q.charCodeAt(i); // so different puzzle has different rng
 rng = (rng+9e9)%list.length | 0;
@@ -52,7 +55,7 @@ function Item(item, checker) {
 		+encode(item[i][0])+'</div></div>').join('');
 }
 function defaultList() {
-	return 'You have tried for '+times+' times.';
+	return 'You have tried for '+times+(maxTries<Infinity?'/'+maxTries:'')+' times.';
 }
 search.addEventListener('input', function() {
 	var mtc = search.value;
@@ -78,6 +81,8 @@ select = function (idx) { //global
 	++times;
 	if (obj === ans) {
 		guessing.innerHTML = '<div style="color:green">You guessed correctly in '+times+' tries</div>'
+	} else if (times >= maxTimes) {
+		guessing.innerHTML = '<div style="color:red">Oops... You ran out of tries</div>'
 	} else {
 		search.value = '';
 		searched.innerHTML = defaultList();
