@@ -81,7 +81,7 @@ select = function (idx) { //global
 	++times;
 	if (obj === ans) {
 		guessing.innerHTML = '<div style="color:green">You guessed correctly in '+times+' tries</div>'
-	} else if (times >= maxTimes) {
+	} else if (times >= maxTries) {
 		guessing.innerHTML = '<div style="color:red">Oops... You ran out of tries</div>'
 	} else {
 		search.value = '';
