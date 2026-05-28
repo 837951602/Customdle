@@ -39,9 +39,10 @@ var times = 0;
 !async function(){console.log(1);
 				  // var q, ans;
 var {fields, list, maxTries, desc} = JSON.parse(q=await (await fetch(q=(location.hash || '#letter').slice(1) + '.json')).text());
-divdesc.innerText = new Date().toJSON().slice(0,10) + '\n' + [desc];
+var eDate = new Date()
+divdesc.innerText = eDate.toJSON().slice(0,10) + '\n' + [desc];
 maxTries = Math.max(0, maxTries|0) || Infinity;
-var rng = +new Date() / 86400000 | 0;console.log(2);
+var rng = +eDate / 86400000 | 0;console.log(2);
 for (var i=0; i<q.length; ++i) rng ^= rng * (2*i) ^ q.charCodeAt(i); // so different puzzle has different rng
 rng = (rng+9e9)%list.length | 0;
 ans = list[rng];
@@ -76,11 +77,13 @@ select = function (idx) { //global
 	var obj = list.splice(idx,1)[0];
 	if (obj[0][2] != null && obj[0][2] === ans[0][2]) obj = ans; // Equivalent joint
 	var elem = document.createElement('div');
+	elem.classList.add('row');
+	elem.classList.add('rowflag');
 	elem.innerHTML = Item(obj, AnswerChecker);
 	chosen.insertBefore(elem, chosen.firstChild);
 	++times;
 	if (obj === ans) {
-		guessing.innerHTML = '<div style="color:green">You guessed correctly in '+times+' tries</div>'
+		guessing.innerHTML = '<div style="color:green">You guessed correctly in '+times+' tries. <input type="button" onclick="share('+[times,maxTries]+')" value="Share"></div>'
 	} else if (times >= maxTries) {
 		guessing.innerHTML = '<div style="color:red">Oops... You ran out of tries</div>'
 	} else {
@@ -108,5 +111,10 @@ function AnswerChecker(ref, expect, actual) { // console.log(ref, expect, actual
 	}
 }
 }();
-
+function Share(times,maxTries) {
+	var W = {'rowflag': '\n', correct: '🟩', partial:'🟨', incorrect:'⬛'};
+	var copy = [...document.getElementsByTagName('div')].map(t=>W[t.classList[1]]||'').join('');
+	navigator.clipboard.writeText('Customdle '+eDate.toJSON().slice(0,10)+' '+
+		times+(maxTries<Infinity?'/'+maxTries:' times')	  +copy+'\n'+location.href);
+}
 </script></body></html>
