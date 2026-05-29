@@ -83,7 +83,7 @@ select = function (idx) { //global
 	chosen.insertBefore(elem, chosen.firstChild);
 	++times;
 	if (obj === ans) {
-		guessing.innerHTML = '<div style="color:green">You guessed correctly in '+times+' tries. <input type="button" onclick="Share(eDate,\''+  times+(maxTries<Infinity?'/'+maxTries:' times'  +'\')" value="Share"></div>'
+		guessing.innerHTML = '<div style="color:green">You guessed correctly in '+times+' tries. <input type="button" onclick="Share(eDate,\''+  times+(maxTries<Infinity?'/'+maxTries:' times')  +'\')" value="Share"></div>'
 	} else if (times >= maxTries) {
 		guessing.innerHTML = '<div style="color:red">Oops... You ran out of tries. <input type="button" onclick="Share(eDate,\'(failed)\')" value="Share"></div>'
 	} else {
