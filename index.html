@@ -83,9 +83,9 @@ select = function (idx) { //global
 	chosen.insertBefore(elem, chosen.firstChild);
 	++times;
 	if (obj === ans) {
-		guessing.innerHTML = '<div style="color:green">You guessed correctly in '+times+' tries. <input type="button" onclick="share('+[times,maxTries]+')" value="Share"></div>'
+		guessing.innerHTML = '<div style="color:green">You guessed correctly in '+times+' tries. <input type="button" onclick="Share(eDate,\''+  times+(maxTries<Infinity?'/'+maxTries:' times'  +'\')" value="Share"></div>'
 	} else if (times >= maxTries) {
-		guessing.innerHTML = '<div style="color:red">Oops... You ran out of tries</div>'
+		guessing.innerHTML = '<div style="color:red">Oops... You ran out of tries. <input type="button" onclick="Share(eDate,\'(failed)\')" value="Share"></div>'
 	} else {
 		search.value = '';
 		searched.innerHTML = defaultList();
@@ -111,10 +111,10 @@ function AnswerChecker(ref, expect, actual) { // console.log(ref, expect, actual
 	}
 }
 }();
-function Share(times,maxTries) {
+function Share(eDate,times) {
 	var W = {'rowflag': '\n', correct: '🟩', partial:'🟨', incorrect:'⬛'};
 	var copy = [...document.getElementsByTagName('div')].map(t=>W[t.classList[1]]||'').join('');
 	navigator.clipboard.writeText('Customdle '+eDate.toJSON().slice(0,10)+' '+
-		times+(maxTries<Infinity?'/'+maxTries:' times')	  +copy+'\n'+location.href);
+		times	  +copy+'\n'+location.href);
 }
 </script></body></html>
